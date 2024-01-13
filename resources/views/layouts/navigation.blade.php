@@ -16,7 +16,7 @@
                         Dashboard
                     </x-nav-link>
 
-                    <x-nav-link :href="route('player')" :active="request()->routeIs('player')">
+                    <x-nav-link :href="route('players.index')" :active="request()->routeIs('players.index')">
                         Jogadores
                     </x-nav-link>
 
@@ -79,7 +79,7 @@
                 Dashboard
             </x-responsive-nav-link>
 
-            <x-responsive-nav-link  :href="route('player')" :active="request()->routeIs('player')">
+            <x-responsive-nav-link  :href="route('players.index')" :active="request()->routeIs('players.index')">
                 Jogadores
             </x-responsive-nav-link >
 
