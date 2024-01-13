@@ -49,10 +49,10 @@
                                         {{$player->email}}
                                     </td>
                                     <td class="border border-gray-300 dark:border-gray-700 p-4 text-gray-700 dark:text-gray-200">
-                                        {{$player->skills_levels}}
+                                        {{$player->getSkillsLevels()}}
                                     </td>
                                     <td class="border border-gray-300 dark:border-gray-700 p-4 text-gray-700 dark:text-gray-200">
-                                        {{$player->goalkeeper}}
+                                        {{$player->isGoalkeeper()}}
                                     </td>
                                     <td class="border border-gray-300 dark:border-gray-700 p-4 text-gray-700 dark:text-gray-200">
                                         <div class="flex justify-center">
