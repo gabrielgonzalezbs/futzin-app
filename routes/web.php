@@ -32,10 +32,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('/players', PlayersController::class)
         ->except(['show']);
 
-    Route::resource('/matches', MatchesController::class)
-        ->except(['show']);
+    Route::resource('/matches', MatchesController::class);
 
-    Route::post('/matches/{id}/random', [MatchesController::class, 'random'])->name('matches.random');
+    Route::post('/matches/{match}/random', [MatchesController::class, 'random'])->name('matches.random');
 
 });
 
