@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MatchesController;
 use App\Http\Controllers\PlayersController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -23,10 +24,6 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/matches', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('matche');
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -34,6 +31,11 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('/players', PlayersController::class)
         ->except(['show']);
+
+    Route::resource('/matches', MatchesController::class)
+        ->except(['show']);
+
+    Route::post('/matches/{id}/random', [MatchesController::class, 'random'])->name('matches.random');
 
 });
 

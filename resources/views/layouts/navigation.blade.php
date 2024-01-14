@@ -20,7 +20,7 @@
                         Jogadores
                     </x-nav-link>
 
-                    <x-nav-link :href="route('matche')" :active="request()->routeIs('matche')">
+                    <x-nav-link :href="route('matches.index')" :active="request()->routeIs('matches.index')">
                         Partidas
                     </x-nav-link>
                 </div>
@@ -83,7 +83,7 @@
                 Jogadores
             </x-responsive-nav-link >
 
-            <x-responsive-nav-link  :href="route('matche')" :active="request()->routeIs('matche')">
+            <x-responsive-nav-link  :href="route('matches.index')" :active="request()->routeIs('matches.index')">
                 Partidas
             </x-responsive-nav-link >
         </div>
