@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Players extends Model
 {
@@ -23,6 +24,14 @@ class Players extends Model
         'goalkeeper',
         'user_id'
     ];
+
+    /**
+     * Get the players for the match.
+     */
+    public function playersMatches(): HasMany
+    {
+        return $this->hasMany(PlayersMatches::class, 'player_id', 'id');
+    }
 
     /**
      * isGoalkeeper function
