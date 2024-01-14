@@ -29,7 +29,8 @@ class PlayersController extends Controller
     public function index()
     {
 
-        $players = Players::all();
+        $players = Players::where('user_id', Auth::user()->id)
+            ->get();
 
         return view('players.index', ["players" => $players]);
     }
