@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('players_matches', function (Blueprint $table) {
             $table->id();
-            $table->boolean('confirmed');
-            $table->dateTime('confirmation_date');
-            $table->string('team_name', 255);
+            $table->boolean('confirmed')->nullable();
+            $table->dateTime('confirmation_date')->nullable();
+            $table->string('team_name', 255)->nullable();
             $table->foreignId('player_id')
                 ->references('id')
                 ->on('players')
