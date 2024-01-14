@@ -131,4 +131,90 @@ class MatchesRepository
 
     }
 
+    public function markeSort(Matches $match, object $players) : Bool {
+        $groupSize = $match->players_per_team;
+        $numGroups = ceil($players->count() / $groupSize);
+        $groups = array();
+
+        for ($i = 0; $i < $numGroups; $i++) {
+            $groups[$i] = array(
+                "hasGoalkeeper" => false,
+                "players" => [],
+            );
+        }
+
+        // assign players to groups
+        $index = 0;
+        while ($index < $players->count()) {
+
+            $player = $players[$index];
+
+            $groups = $this->sortPlayers($player, $groups, $groupSize, $numGroups);
+
+            $index++;
+        }
+
+
+        $match->matchesPlayers->each(function (PlayersMatches $playersMatches) use ($groups) {
+
+            foreach ($groups as $key => $group) {
+
+                foreach ($group['players'] as $players) {
+
+                    if ($playersMatches->player_id == $players->player_id) {
+                        $playersMatches->team_name = "$key";
+                    }
+
+                }
+
+            }
+
+        });
+
+        $match->status = 'R';
+
+        return $match->push();
+    }
+
+    /**
+     * sortPlayers function
+     *
+     * Classify players by browsing existing
+     * groups and checking requirements
+     *
+     * @param object $player
+     * @param array $groups
+     * @param string $groupSize
+     * @param string $numGroups
+     * @return array
+     */
+    private function sortPlayers($player, $groups, $groupSize, $numGroups)
+    {
+
+        for ($i=0; $i < $numGroups; $i++) {
+            if ($player->goalkeeper === 1 && $groups[$i]["hasGoalkeeper"]) {
+
+                if ($i === count($groups) - 1) {
+                    $groups['reservas']["players"][] = $player;
+                    break;
+                }
+
+                continue;
+            }
+
+            if (count($groups[$i]['players']) >= $groupSize) {
+                continue;
+            }
+
+            if ($player->goalkeeper === 1 && !$groups[$i]["hasGoalkeeper"]) {
+                $groups[$i]["hasGoalkeeper"] = $player->goalkeeper == 1 ? true : false;
+            }
+
+            $groups[$i]["players"][] = $player;
+            break;
+        }
+
+        return $groups;
+    }
+
 }

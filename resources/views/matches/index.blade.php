@@ -56,17 +56,30 @@
                                     </td>
                                     <td class="border border-gray-300 dark:border-gray-700 p-4 text-gray-700 dark:text-gray-200">
                                         <div class="flex justify-center">
-                                            <x-primary-href-button :href="route('matches.edit', $match->id)" class="mr-2" title="Clique para editar a partida">
-                                                <i class="fa-solid fa-user-pen"></i>
-                                            </x-primary-href-button>
 
-                                            <form action="{{ route('matches.random', $match->id) }}" method="post">
-                                                @csrf
+                                            @if ($match->status === 'A')
 
-                                                <x-primary-button class="mr-2" title="Clique para realizar o sorteio" onclick="return confirm('Tem certeza que deseja realizar o sorteio da partida?')">
-                                                    <i class="fa-solid fa-shuffle"></i>
-                                                </x-primary-button>
-                                            </form>
+                                                <x-primary-href-button :href="route('matches.edit', $match->id)" class="mr-2" title="Clique para editar a partida">
+                                                    <i class="fa-solid fa-user-pen"></i>
+                                                </x-primary-href-button>
+
+                                                <form action="{{ route('matches.random', $match->id) }}" method="post">
+                                                    @csrf
+
+                                                    <x-primary-button class="mr-2" title="Clique para realizar o sorteio" onclick="return confirm('Tem certeza que deseja realizar o sorteio da partida?')">
+                                                        <i class="fa-solid fa-shuffle"></i>
+                                                    </x-primary-button>
+                                                </form>
+
+                                            @endif
+
+                                            @if ($match->status === 'R')
+
+                                                <x-primary-href-button :href="route('matches.show', $match->id)" class="mr-2" title="Clique para visualizar os detalhes da partida">
+                                                    <i class="fa-solid fa-list"></i>
+                                                </x-primary-href-button>
+
+                                            @endif
 
                                             <form action="{{ route('matches.destroy', $match->id) }}" method="post">
                                                 @csrf

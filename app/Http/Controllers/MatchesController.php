@@ -7,7 +7,6 @@ use App\Models\Matches;
 use App\Models\Players;
 use App\Repositories\MatchesRepository;
 use Illuminate\Database\Query\JoinClause;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use function Psy\debug;
@@ -59,9 +58,19 @@ class MatchesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Matches $match)
     {
-        //
+        $players = Players::leftJoin('players_matches', function (JoinClause $join) use ($match) {
+            $join->on('players.id', '=', 'players_matches.player_id')
+                ->where('players_matches.matche_id', '=', $match->id);
+            }
+        )
+        ->where("players_matches.confirmed", "=", 1)
+        ->select('players.id', 'players.name', 'players.skills_levels', 'players.goalkeeper', 'players_matches.id AS players_matches_id', 'players_matches.confirmed', 'players_matches.team_name')
+        ->orderByRaw('players_matches.team_name, players.goalkeeper DESC, players.skills_levels DESC')
+        ->get();
+
+    return view('matches.lineup', ['match' => $match, 'players' => $players]);
     }
 
     /**
@@ -110,4 +119,35 @@ class MatchesController extends Controller
             ->with('message.success', "Partida '{$match->description}' removida com sucesso!");
 
     }
+
+    /**
+     * Assembles teams and players
+     */
+    public function random(Matches $match)
+    {
+
+        $players = $match->matchesPlayers()
+            ->join('players', 'players.id', '=', 'players_matches.player_id')
+            ->where("players_matches.confirmed", "=", 1)
+            ->orderByRaw('players.goalkeeper DESC, players.skills_levels DESC')
+            ->get();
+
+        $minimumNumberPlayers = $match->players_per_team * 2;
+
+        if ($minimumNumberPlayers > $players->count()) {
+            return redirect()->route('matches.index')
+                ->with('message.error', "A partida não tem o número mínimo de joragores confirmados!");
+        }
+
+        $affected = $this->matchesRepository->markeSort($match, $players);
+
+        if (!$affected) {
+            return redirect()->route('matches.index')
+                ->with('message.error', "Houve uma falha no processo de sorteio da partida '{$match->description}'!");
+        }
+
+        return redirect()->route('matches.index')
+                ->with('message.success', "Sorteio realizado com sucesso!");
+    }
+
 }
