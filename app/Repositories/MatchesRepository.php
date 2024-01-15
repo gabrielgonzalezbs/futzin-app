@@ -7,6 +7,7 @@ use App\Models\Matches;
 use App\Models\PlayersMatches;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Ramsey\Uuid\Uuid;
 
 class MatchesRepository
 {
@@ -22,7 +23,7 @@ class MatchesRepository
                 'location' => $request->input('location'),
                 'players_per_team' => $request->input('players_per_team'),
                 'status' => 'A',
-                'token' => 'token_0',
+                'token' => Uuid::uuid4(),
                 'user_id' => $user->id
             ]);
 
