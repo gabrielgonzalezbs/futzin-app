@@ -193,7 +193,7 @@ class MatchesRepository
     {
 
         for ($i=0; $i < $numGroups; $i++) {
-            if ($player->goalkeeper === 1 && $groups[$i]["hasGoalkeeper"]) {
+            if ($player->goalkeeper && $groups[$i]["hasGoalkeeper"]) {
 
                 if ($i === count($groups) - 1) {
                     $groups['reservas']["players"][] = $player;
@@ -207,7 +207,7 @@ class MatchesRepository
                 continue;
             }
 
-            if ($player->goalkeeper === 1 && !$groups[$i]["hasGoalkeeper"]) {
+            if ($player->goalkeeper && !$groups[$i]["hasGoalkeeper"]) {
                 $groups[$i]["hasGoalkeeper"] = $player->goalkeeper == 1 ? true : false;
             }
 
