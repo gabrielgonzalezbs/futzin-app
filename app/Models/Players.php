@@ -25,6 +25,10 @@ class Players extends Model
         'user_id'
     ];
 
+    protected $casts = [
+        "goalkeeper" => 'boolean'
+    ];
+
     /**
      * Get the players for the match.
      */
