@@ -60,7 +60,8 @@ class MatchesController extends Controller
      */
     public function show(Matches $match)
     {
-        $players = Players::leftJoin('players_matches', function (JoinClause $join) use ($match) {
+        $players = Players::where('user_id', Auth::user()->id)
+        ->leftJoin('players_matches', function (JoinClause $join) use ($match) {
             $join->on('players.id', '=', 'players_matches.player_id')
                 ->where('players_matches.matche_id', '=', $match->id);
             }
@@ -79,7 +80,8 @@ class MatchesController extends Controller
     public function edit(Matches $match)
     {
 
-        $players = Players::leftJoin('players_matches', function (JoinClause $join) use ($match) {
+        $players = Players::where('user_id', Auth::user()->id)
+            ->leftJoin('players_matches', function (JoinClause $join) use ($match) {
                     $join->on('players.id', '=', 'players_matches.player_id')
                         ->where('players_matches.matche_id', '=', $match->id);
                 }
